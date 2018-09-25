@@ -8,9 +8,15 @@ Bootstrap(app)
 def index():
     return render_template('index.html')
 
-@app.route('/query')
+@app.route('/query', methods=['POST'])
 def query():
-    return render_template('index.html')
+    if request.method == 'POST':
+        userInput = request.form['userInput']
+
+        # Once we get the user input we will process it with the Twitter
+        # Sentiment Analysis Pipeline and display the results/Visualization
+
+    return render_template('index.html', output = userInput)
 
 if __name__ == '__main__':
     app.run(debug=True)

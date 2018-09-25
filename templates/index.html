@@ -6,12 +6,18 @@
       </div>
     </div>
     <div class="container">
-      <form id="queryForm" action="{{url_for('query')}}" method="post">
+      <form id="queryForm" action="{{url_for('query')}}" method="POST">
         <textarea name="userInput" rows="1" cols="1" class="form-control"></textarea>
         <br>
         <input type="submit" name="" value="Submit" class="btn btn-primary">
       </form>
     </div>
-
+    <div class="container">
+      <div class="card">
+        <div>
+          <p>{{ output }}</p>
+        </div>
+      </div>
+    </div>
 
 {% endblock %}
