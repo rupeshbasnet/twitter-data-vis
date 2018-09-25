@@ -1,12 +1,17 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Twitter Data Vis App</title>
-  </head>
-  <body>
+{% extends 'bootstrap/base.html' %}
+{% block content %}
     <div class="container">
-      <h2>Twitter Data Visualization Application</h2>
+      <div class="jumbotron text-center">
+        <h2>Twitter Data Visualization Application</h2>
+      </div>
     </div>
-  </body>
-</html>
+    <div class="container">
+      <form id="queryForm" action="{{url_for('query')}}" method="post">
+        <textarea name="userInput" rows="1" cols="1" class="form-control"></textarea>
+        <br>
+        <input type="submit" name="" value="Submit" class="btn btn-primary">
+      </form>
+    </div>
+
+
+{% endblock %}
