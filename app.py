@@ -1,14 +1,12 @@
-from flask import Flask, render_template, request, url_for
+import tweepy
+from flask import Flask, render_template, request
 from flask_bootstrap import Bootstrap
 from textblob import TextBlob
-import sys, tweepy
-import matplotlib.pyplot as plt
-from passwords import API_KEY, API_SECRET_KEY, ACCESS_TOKEN, ACCESS_TOKEN_SECRET
 
-TWITTER_KEY = API_KEY
-TWITTER_KEY_SECRET = API_SECRET_KEY
-TWITTER_TOKEN = ACCESS_TOKEN
-TWITTER_TOKEN_SECRET = ACCESS_TOKEN_SECRET
+TWITTER_KEY = "5DBafM7qC12MFBEG5zJQk4gGd"
+TWITTER_KEY_SECRET = "sX0oQmylHOO3s8w4yCUmXnlrM6grMuvZq0TQOEYsj6ZuMaG0XO"
+TWITTER_TOKEN = "826979343075332096-9dx6GiMDw1lKSRR51tgBU4Gthjacq44"
+TWITTER_TOKEN_SECRET = "8Zt0sa8qspou4j8VKqZzhMWLwlzwToPf7QxPd4CyrJlZT"
 
 app = Flask(__name__)
 Bootstrap(app)
