@@ -26,7 +26,6 @@ def index():
 def percentageCalc(section, total):
     return 100 * float(section)/float(total)
 
-
 def tweetsIterator(tweets):
     positiveCount = 0
     negativeCount = 0
