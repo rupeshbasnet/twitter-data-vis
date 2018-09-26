@@ -1,5 +1,5 @@
 *.csv
 *.json
 .DS_STORE
-.idea
-.ipynb_checkpoints
+dir_to_ignore/.idea
+dir_to_ignore/.ipynb_checkpoints
