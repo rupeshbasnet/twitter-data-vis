@@ -1,3 +1,5 @@
 passwords.py
 *.pyc
 .DS_Store
+react_app/node_modules/
+react_app/package-lock.json
