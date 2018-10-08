@@ -3,5 +3,6 @@ passwords.py
 .DS_Store
 react_app/node_modules/
 react_app/package-lock.json
-Twitter_Data_Extraction/.ipynb_checkpoints/Untitled-checkpoint.ipynb
+Twitter_Data_Extraction/.ipynb_checkpoints/
 Twitter_Data_Extraction/.idea/
+Twitter_Data_Extraction/WITBragDay.csv
