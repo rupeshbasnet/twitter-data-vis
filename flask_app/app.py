@@ -1,8 +1,7 @@
-from flask import Flask, render_template, request, url_for
+import tweepy
+from flask import Flask, render_template, request
 from flask_bootstrap import Bootstrap
 from textblob import TextBlob
-import sys, tweepy
-import matplotlib.pyplot as plt
 from passwords import API_KEY, API_SECRET_KEY, ACCESS_TOKEN, ACCESS_TOKEN_SECRET
 import csv
 
@@ -25,7 +24,6 @@ def index():
 
 def percentageCalc(section, total):
     return 100 * float(section)/float(total)
-
 
 def tweetsIterator(tweets):
     positiveCount = 0
