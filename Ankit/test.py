@@ -8,7 +8,7 @@ app = Flask(__name__)
 #import engine and sessionmaker from sqlalchemy to connect
 #to the database and create sessions.
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
 #import Base and TwitterData class from database_setup.py to 
 #access the data in the database.
 from database_setup import Base, TwitterData
@@ -20,22 +20,22 @@ engine = create_engine('sqlite:///database.db')
 Base.metadata.bind=engine
 
 #Creating session to perform CRUD(Create,Read,Update, and Delete) operations.
-DBSession = sessionmaker(bind=engine)
-session = DBSession()
+session = scoped_session(sessionmaker(bind=engine))
+#session = DBSession()
 
 #creating URL route for WITBRAGDAY 
 @app.route('/twitterData/WITBRAGDAY')
 def twitterDataJSON():
-	#Get all the data from TwitterData and save it in Data.
-	Data = session.query(TwitterData).all()
-	#Using Jsonify function from flask to access each piece of
-	#information from Data and use serialize property defined
-	# in database_setup.py to create JSON objects.
-	return jsonify(Tweets = [i.serialize for i in Data] )
+    #Get all the data from TwitterData and save it in Data.
+    Data = session.query(TwitterData).all()
+    #Using Jsonify function from flask to access each piece of
+    #information from Data and use serialize property defined
+    # in database_setup.py to create JSON objects.
+    return jsonify(Tweets = [i.serialize for i in Data] )
 #creating URL route for WITBRAGDAY when tweets are filtered by id.
 @app.route('/twitterData/<int:id>/JSON')
 def twitterDataPerIDJSON(id):
-	#Get information on each tweet filtered by id and save it into Data.
+    #Get information on each tweet filtered by id and save it into Data.
     Data = session.query(TwitterData).filter_by(id = id).all()
     #Using jsonify function from flask to access the tweets from Data and use
     #serialize property in database_setup.py to create JSON objects.
