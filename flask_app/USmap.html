@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+	.state{
+		fill: none;
+		stroke: #a9a9a9;
+		stroke-width: 1;
+	}
+	.state:hover{
+		fill-opacity:0.5;
+	}
+	#tooltip {
+		position: absolute;
+		text-align: center;
+		padding: 20px;
+		margin: 10px;
+		font: 12px sans-serif;
+		background: lightsteelblue;
+		border: 1px;
+		border-radius: 2px;
+		pointer-events: none;
+	}
+	#tooltip h4{
+		margin:0;
+		font-size:14px;
+	}
+	#tooltip{
+		background:rgba(0,0,0,0.9);
+		border:1px solid grey;
+		border-radius:5px;
+		font-size:12px;
+		width:auto;
+		padding:4px;
+		color:white;
+		opacity:0;
+	}
+	#tooltip table{
+		table-layout:fixed;
+	}
+	#tooltip tr td{
+		padding:0;
+		margin:0;
+	}
+	#tooltip tr td:nth-child(1){
+		width:50px;
+	}
+	#tooltip tr td:nth-child(2){
+		text-align:center;
+	}
+</style>
+<body>
+<div id="tooltip"></div><!-- div to hold tooltip. -->
+<svg width="960" height="600" id="statesvg"></svg> <!-- svg to hold the map. -->
+<script src="uStates.js"></script> <!-- creates uStates. -->
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+
+	function tooltipHtml(n, d){	/* function to create html content string in tooltip div. */
+		return "<h4>"+n+"</h4><table>"+
+			"<tr><td>Positive</td><td>"+(d.positive)+"</td></tr>"+
+			"<tr><td>Neutral</td><td>"+(d.neutral)+"</td></tr>"+
+			"<tr><td>Negative</td><td>"+(d.negative)+"</td></tr>"+
+			"</table>";
+	}
+
+	var sampleData = {
+    'AL': {'positive': 5},
+   'AZ': {'neutral': 4, 'positive': 5},
+   'CA': {'negative': 10, 'neutral': 83, 'positive': 109},
+   'CO': {'negative': 2, 'neutral': 3, 'positive': 13},
+   'CT': {'neutral': 3},
+   'DE': {'negative': 1, 'positive': 1},
+   'FL': {'negative': 3, 'neutral': 34, 'positive': 35},
+   'GA': {'negative': 3, 'neutral': 23, 'positive': 8},
+   'HI': {'positive': 1},
+   'IA': {'negative': 1, 'neutral': 2, 'positive': 3},
+   'ID': {'positive': 1},
+   'IL': {'negative': 8, 'neutral': 21, 'positive': 30},
+   'IN': {'negative': 1, 'neutral': 4, 'positive': 3},
+   'KS': {'neutral': 4, 'positive': 1},
+   'LA': {'negative': 1, 'neutral': 3},
+   'MA': {'negative': 4, 'neutral': 20, 'positive': 32},
+   'MD': {'negative': 1, 'neutral': 7, 'positive': 9},
+   'MI': {'negative': 2, 'neutral': 7, 'positive': 8},
+   'MN': {'negative': 4, 'neutral': 32, 'positive': 81},
+   'MO': {'neutral': 1, 'positive': 1},
+   'MS': {'neutral': 1, 'positive': 2},
+   'NC': {'negative': 1, 'neutral': 2, 'positive': 10},
+   'NE': {'neutral': 2, 'positive': 2},
+   'NH': {'negative': 1, 'neutral': 11, 'positive': 22},
+   'NJ': {'negative': 1, 'neutral': 1, 'positive': 6},
+   'NM': {'neutral': 4, 'positive': 1},
+   'NV': {'neutral': 1, 'positive': 1},
+   'NY': {'negative': 12, 'neutral': 32, 'positive': 54},
+   'OH': {'neutral': 7, 'positive': 7},
+   'OK': {'positive': 1},
+   'OR': {'negative': 1, 'neutral': 9, 'positive': 14},
+   'PA': {'negative': 3, 'neutral': 23, 'positive': 24},
+   'RI': {'negative': 1, 'neutral': 2, 'positive': 8},
+   'SC': {'neutral': 1, 'positive': 3},
+   'SD': {'negative': 1},
+   'TN': {'neutral': 1, 'positive': 5},
+   'TX': {'negative': 1, 'neutral': 37, 'positive': 18},
+   'WA': {'negative': 17, 'neutral': 57, 'positive': 71},
+   'WI': {'negative': 1, 'positive': 1}
+ };
+
+	/* draw states on id #statesvg */
+	uStates.draw("#statesvg", sampleData, tooltipHtml);
+
+	d3.select(self.frameElement).style("height", "600px");
+</script>
+
+</body>
