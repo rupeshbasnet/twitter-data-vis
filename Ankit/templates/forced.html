@@ -1,0 +1,92 @@
+{% extends "base.html" %} {%block content %}
+<style>
+.links line {
+  stroke: #999;
+  stroke-opacity: 0.6;
+}
+.nodes circle {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+text {
+  font-family: sans-serif;
+  font-size: 10px;
+}
+</style>
+<svg width="1200" height="1000"></svg>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script>
+var svg = d3.select("svg"),
+    width = +svg.attr("width"),
+    height = +svg.attr("height");
+var color = d3.scaleOrdinal(d3.schemeCategory20);
+var simulation = d3.forceSimulation()
+    .force("link", d3.forceLink().id(function(d) { return d.id; }))
+    .force("charge", d3.forceManyBody())
+    .force("center", d3.forceCenter(width / 2, height / 2));
+var data = {
+  "nodes": [
+  {"group": 1, "id": "#WITBragDay"}, {"group": 2, "id": "hashtag"}, {"group": 1, "id": "check"}, {"group": 1, "id": "Loving"}, {"group": 2, "id": "tweets"}, {"group": 1, "id": "\\u200d"}, {"group": 1, "id": "King"}, {"group": 2, "id": "From"}, {"group": 1, "id": "women"}, {"group": 2, "id": "tech"}, {"group": 1, "id": "Thank"}, {"group": 2, "id": "You"}, {"group": 1, "id": "amazing"}, {"group": 1, "id": "Proud"}, {"group": 1, "id": "\\u00fc"}, {"group": 2, "id": "n"}, {"group": 1, "id": "software"}, {"group": 2, "id": "industry"}, {"group": 1, "id": "I"}, {"group": 2, "id": "got"}, {"group": 1, "id": "Check"}, {"group": 1, "id": "reading"}, {"group": 1, "id": "stories"}, {"group": 1, "id": "The"}, {"group": 2, "id": "gender"}, {"group": 2, "id": "bug"}, {"group": 2, "id": "applaud"}, {"group": 1, "id": "1"}, {"group": 2, "id": "st"}, {"group": 1, "id": "\\ufe0f"}, {"group": 1, "id": "Last"}, {"group": 2, "id": "love"}, {"group": 1, "id": "\\ud83e"}, {"group": 2, "id": "\\udd13"}, {"group": 1, "id": "years"}, {"group": 2, "id": "ago"}, {"group": 2, "id": "know"}, {"group": 2, "id": "latest"}, {"group": 1, "id": "https://t.co/Q9srJ42pGg"}, {"group": 1, "id": "So"}, {"group": 2, "id": "many"}, {"group": 1, "id": "Women"}, {"group": 2, "id": "Tech"}, {"group": 2, "id": "GOD"}, {"group": 2, "id": "work"}, {"group": 2, "id": "wrote"}, {"group": 2, "id": "started"}
+  ],
+  "links": [
+{"source": "hashtag", "strength": 0.37, "target": "#WITBragDay"}, {"source": "#WITBragDay", "strength": 0.23, "target": "check"}, {"source": "#WITBragDay", "strength": 0.21, "target": "Loving"}, {"source": "tweets", "strength": 0.77, "target": "#WITBragDay"}, {"source": "\\u200d", "strength": 0.38, "target": "\\u200d"}, {"source": "From", "strength": 0.21, "target": "King"}, {"source": "tech", "strength": 0.82, "target": "women"}, {"source": "You", "strength": 0.2, "target": "Thank"}, {"source": "women", "strength": 0.33, "target": "amazing"}, {"source": "#WITBragDay", "strength": 0.21, "target": "Proud"}, {"source": "n", "strength": 0.24, "target": "\\u00fc"}, {"source": "industry", "strength": 0.22, "target": "software"}, {"source": "got", "strength": 0.2, "target": "I"}, {"source": "#WITBragDay", "strength": 0.27, "target": "Check"}, {"source": "#WITBragDay", "strength": 0.26, "target": "reading"}, {"source": "#WITBragDay", "strength": 0.23, "target": "stories"}, {"source": "gender", "strength": 0.24, "target": "The"}, {"source": "bug", "strength": 0.24, "target": "gender"}, {"source": "applaud", "strength": 0.2, "target": "I"}, {"source": "st", "strength": 0.37, "target": "1"}, {"source": "\\ufe0f", "strength": 0.29, "target": "\\ufe0f"}, {"source": "King", "strength": 0.21, "target": "Last"}, {"source": "love", "strength": 0.51, "target": "I"}, {"source": "software", "strength": 0.23, "target": "bug"}, {"source": "\\udd13", "strength": 0.21, "target": "\\ud83e"}, {"source": "ago", "strength": 0.22, "target": "years"}, {"source": "know", "strength": 0.35, "target": "I"}, {"source": "latest", "strength": 0.5, "target": "The"}, {"source": "Last", "strength": 0.21, "target": "https://t.co/Q9srJ42pGg"}, {"source": "many", "strength": 0.43, "target": "So"}, {"source": "#WITBragDay", "strength": 0.28, "target": "tech"}, {"source": "Tech", "strength": 0.38, "target": "Women"}, {"source": "#WITBragDay", "strength": 0.31, "target": "hashtag"}, {"source": "GOD", "strength": 0.21, "target": "From"}, {"source": "#WITBragDay", "strength": 0.21, "target": "tweets"}, {"source": "work", "strength": 0.36, "target": "I"}, {"source": "The", "strength": 0.25, "target": "#WITBragDay"}, {"source": "wrote", "strength": 0.32, "target": "I"}, {"source": "started", "strength": 0.24, "target": "I"}, {"source": "I", "strength": 0.82, "target": "#WITBragDay"}
+  ]
+};
+  var link = svg.append("g")
+      .attr("class", "links")
+    .selectAll("line")
+    .data(data.links)
+    .enter().append("line")
+      .attr("stroke-width", function(d) { return Math.sqrt(d.value); });
+  var node = svg.append("g")
+      .attr("class", "nodes")
+    .selectAll("g")
+    .data(data.nodes)
+    .enter().append("g")
+  var circles = node.append("circle")
+      .attr("r", 5)
+      .attr("fill", function(d) { return color(d.group); })
+      .call(d3.drag()
+          .on("start", dragstarted)
+          .on("drag", dragged)
+          .on("end", dragended));
+  var lables = node.append("text")
+      .text(function(d) {
+        return d.id;
+      })
+      .attr('x', 6)
+      .attr('y', 3);
+  node.append("title")
+      .text(function(d) { return d.id; });
+  simulation
+      .nodes(data.nodes)
+      .on("tick", ticked);
+  simulation.force("link")
+      .links(data.links);
+  function ticked() {
+    link
+        .attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+    node
+        .attr("transform", function(d) {
+          return "translate(" + d.x + "," + d.y + ")";
+        })
+  }
+function dragstarted(d) {
+  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+  d.fx = d.x;
+  d.fy = d.y;
+}
+function dragged(d) {
+  d.fx = d3.event.x;
+  d.fy = d3.event.y;
+}
+function dragended(d) {
+  if (!d3.event.active) simulation.alphaTarget(0);
+  d.fx = null;
+  d.fy = null;
+}
+</script>
+{% endblock %}
