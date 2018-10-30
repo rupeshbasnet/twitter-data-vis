@@ -1,25 +1,49 @@
 {% extends "base.html" %} {% block content %}
-    <!DOCTYPE html>
-<html>
-  <head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  </head>
-  <body>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.min.js"></script>
+    <script type ="text/javascript" src = "{{url_for('static', filename = 'd3v3.min.js')}}"></script>
+    <script type ="text/javascript" src = "{{url_for('static', filename = 'd3.min.js')}}"></script>
+    <script type ="text/javascript" src = "{{url_for('static', filename = 'd3pie.min.js')}}"></script>
     <script type ="text/javascript" src = "{{url_for('static', filename = 'cloud.js')}}"></script>
-  </head>
-  <body>
-    <div id="chart"></div>
+
+    <div class="w3-container" style="padding:128px 16px">
+      <h3 class="w3-center">WIT Brag Day</h3>
+      <p class="w3-center w3-large">Below are the visualizations of the WIT Brag Day event</p>
+      <div class="w3-row-padding">
+        <div class="w3-col l3 m6 w3-margin-bottom">
+          <div class="w3-card">
+            <div class="w3-container">
+              <h3>Word Cloud</h3>
+                <div id="chart"></div>
+            </div>
+          </div>
+        </div>
+        <div class="w3-col l3 m6 w3-margin-bottom">
+          <div class="w3-card">
+            <div class="w3-container">
+              <h3>Pie chart</h3>
+              <div id="myPie"></div>
+            </div>
+          </div>
+        </div>
+        <div class="w3-col l3 m6 w3-margin-bottom">
+          <div class="w3-card">
+            <div class="w3-container">
+              <h3>Hashtags</h3>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script>
       drawWordCloud();
       function drawWordCloud(){
-        // This is the data
         var word_count = {"code": 179, "Thank": 124, "I": 1289, "many": 128, "awesome": 147, "work": 156, "#WiTBragDay": 235, "first": 143, "amazing": 173, "This": 170, "#WITBragDay": 2530, "tech": 346, "hashtag": 169, "tweets": 163, "amp": 330, "I\'m": 219, "one": 151, "The": 200, "#witbragday": 119, "women": 358};
         var svg_location = "#chart";
-        var width = $(document).width();
-        var height = $(document).height();
+        var charDiv = document.getElementById("chart");
+        var width = 400;
+        var height = 300;
         var fill = d3.scale.category20();
         var word_entries = d3.entries(word_count);
         var xScale = d3.scale.linear()
@@ -57,7 +81,28 @@
         }
         d3.layout.cloud().stop();
       }
+
+      drawPieChart();
+      function drawPieChart() {
+        var pie = new d3v4pie("myPie", {
+        header: {
+          title: {text: "Sentiment Breakdown"}
+        },
+        data: {
+        content: [
+          { label: "Neutral", value: 442 },
+          { label: "Positive", value: 596 },
+          { label: "Negative", value: 81 }]},
+        //Here further operations/animations can be added like click event, cut out the clicked pie section.
+        callbacks: {
+        onMouseoverSegment: function(info) {
+        },
+        onMouseoutSegment: function(info) {
+        }
+        }
+
+        });
+      }
     </script>
-  </body>
-</html>
+
 {% endblock %}

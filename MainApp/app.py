@@ -44,7 +44,7 @@ def winterolympics():
 
 @app.route('/twitterData/witbragday')
 def witbragday():
-    return render_template('worldcloud.html')
+    return render_template('witbragday.html')
 
 #creating URL route for WITBRAGDAY
 @app.route('/twitterData/WITBRAGDAY')
