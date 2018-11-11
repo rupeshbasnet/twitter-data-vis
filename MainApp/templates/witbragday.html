@@ -3,6 +3,8 @@
     <script type ="text/javascript" src = "{{url_for('static', filename = 'd3.min.js')}}"></script>
     <script type ="text/javascript" src = "{{url_for('static', filename = 'd3pie.min.js')}}"></script>
     <script type ="text/javascript" src = "{{url_for('static', filename = 'cloud.js')}}"></script>
+    <script type ="text/javascript" src = "{{url_for('static', filename = 'multiline.js')}}"></script>
+    <link rel="stylesheet" type="text/css" src = "{{url_for('static', filename = 'multiline.css')}}"></link>
 
     <div class="w3-container" style="padding:50px 10px">
       <h3 class="w3-center">WIT Brag Day</h3>
@@ -46,16 +48,49 @@
             <div class="w3-container">
               <h3>Keywords</h3>
               <div id='dashboard2'>
-            </div>
+              </div>
 
-        </div>
+            </div>
+          </div>
+
+      </div>
+
+      <div class="w3-row-padding">
+
+          <div class="w3-card">
+            <div class="w3-container">
+              <h3>Tweets over time</h3>
+              <div class="chart-wrapper" id="chart-line1"></div>
+
+              </div>
+
+            </div>
+          </div>
+
       </div>
 
     </div>
 
-    </div>
-
     <script>
+      var parseDate = d3.time.format("%Y-%m-%dT%H:%M:%S").parse;
+
+  d3.csv('{{url_for('static', filename = 'multi-line_witbrag.csv')}}', function(error, data) {
+  data.forEach(function (d) {
+      d.date = parseDate(d.date);
+      d.value1 = +d.value1;
+      d.value2 = +d.value2;
+      d.value3 = +d.value3;
+  });
+
+  var chart = makeLineChart(data, 'date', {
+      'Negative': {column: 'value1'},
+      'Neutral': {column: 'value2'},
+      'Positive': {column: 'value3'}
+  });
+  chart.bind({selector:"#chart-line1",chartSize:{height:452, width:960}, axisLabels: {xAxis:'Dates', yAxis: 'Count'}});
+  chart.render();
+
+});
       drawWordCloud();
       function drawWordCloud(){
         var word_count = {"code": 179, "Thank": 124, "I": 1289, "many": 128, "awesome": 147, "work": 156, "#WiTBragDay": 235, "first": 143, "amazing": 173, "This": 170, "#WITBragDay": 2530, "tech": 346, "hashtag": 169, "tweets": 163, "amp": 330, "I\'m": 219, "one": 151, "The": 200, "#witbragday": 119, "women": 358};
@@ -339,6 +374,8 @@
       dashboard('#dashboard',freqData);
 
       dashboard('#dashboard2',freqDataKeywords);
+
+
 
     </script>
 
