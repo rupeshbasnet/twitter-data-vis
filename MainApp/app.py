@@ -40,7 +40,7 @@ def charlottesville():
 
 @app.route('/twitterData/forced')
 def winterolympics():
-    return render_template('forced.html')
+    return render_template('dc_test.html')
 
 @app.route('/twitterData/witbragday')
 def witbragday():
