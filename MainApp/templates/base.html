@@ -8,6 +8,7 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<script type ="text/javascript" src = "{{url_for('static', filename = 'crossfilter.js')}}"></script>
 	<link rel="stylesheet" type="text/css" src = "{{url_for('static', filename = 'dc.css')}}"></link>
+	<link rel="stylesheet" type="text/css" src = "{{url_for('static', filename = 'bootstrap.min.css')}}"></script>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<style>
@@ -17,7 +18,7 @@
 	}
 	path {  stroke: #fff; }
 	path:hover {  opacity:0.9; }
-	rect:hover {  fill:blue; }
+	rect_sec:hover {  fill:blue; }
 	.axis {  font: 10px sans-serif; }
 	.legend tr{    border-bottom:1px solid grey; }
 	.legend tr:first-child{    border-top:1px solid grey; }
@@ -90,11 +91,6 @@
 	  stroke-width: 1px;
 	}
 
-	.chart-wrapper .line {
-	  fill: none;
-	  stroke: steelblue;
-	  stroke-width: 3px;
-	}
 
 	.chart-wrapper .legend  {
 	    min-width: 200px;
@@ -147,19 +143,11 @@
 	.chart-wrapper .tooltip text {
 	    font-size: 14px;
 	}
-	.chart-wrapper .tooltip .line {
-	    stroke: steelblue;
-	    stroke-dasharray: 2,5;
-	    stroke-width: 2;
-	    opacity: 0.5;
-	}
 
 	@media (max-width:500px){
 	    .chart-wrapper .line {stroke-width: 3px;}
 	    .chart-wrapper .legend {font-size: 14px;}
 	}
-
-
 
 	.dc-chart path.dc-symbol, .dc-legend g.dc-legend-item.fadeout {
 	  fill-opacity: 0.5;
@@ -214,7 +202,6 @@
 	.dc-chart .grid-line, .dc-chart .axis .grid-line, .dc-chart .grid-line line, .dc-chart .axis .grid-line line {
 	  fill: none;
 	  stroke: #ccc;
-	  opacity: .5;
 	  shape-rendering: crispEdges; }
 
 	.dc-chart .brush rect.selection {
@@ -411,6 +398,10 @@
 
 	.dc-html-legend-container {
 	  height: inherit; }
+
+
+	
+
 	</style>
 <body>
 	{% block content %} {% endblock %}

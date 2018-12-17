@@ -36,8 +36,13 @@ def visualizations():
 
 @app.route('/twitterData/UsMap')
 def charlottesville():
-    return render_template('UsMap.html')
+    return render_template('dc_test_final.html')
 
+@app.route('/twitterData/final')
+def final():
+    return render_template('final_dash.html')
+
+# DC js route
 @app.route('/twitterData/forced')
 def winterolympics():
     return render_template('dc_test.html')

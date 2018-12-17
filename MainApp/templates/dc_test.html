@@ -1,4 +1,5 @@
 {% extends "base.html" %} {%block content %}
+<!--URL Forced -->
 <script src="https://d3js.org/d3.v5.min.js"></script>
 
 <script type ="text/javascript" src = "{{url_for('static', filename = 'd3.min.js')}}"></script>
@@ -34,21 +35,26 @@
 </div>
 
 <script type="text/javascript">
-  var numberFormat = d3.format(".2f");
-
+    // Declare the number format
+    var numberFormat = d3.format(".2f");
+    // Declare the us chart as the geoChoroplethChart
     var usChart = dc.geoChoroplethChart("#us-chart");
+    // Declare the bubble chart as the industry chart
     var industryChart = dc.bubbleChart("#industry-chart");
-
-
+    // Load the d3 with the CSV file
     d3.csv('{{url_for('static', filename = 'WITBrag_DC_Dashboard.csv')}}').then(function (csv) {
+        // Run the data through a crossfilter
         var data = crossfilter(csv);
-
+        // Grab the states from the data dimensions
         var states = data.dimension(function (d) {
             return d["State"];
         });
+        // Grab the favorite_count as the reduce sum
         var stateRaisedSum = states.group().reduceSum(function (d) {
             return d["favorite_count"];
         });
+        var test = states.group().reduceCount();
+        console.log(test);
 
         var industries = data.dimension(function (d) {
             return d["hashtags"];
