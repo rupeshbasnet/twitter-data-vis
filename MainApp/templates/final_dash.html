@@ -1,18 +1,20 @@
 {% extends "base.html" %} {%block content %}
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <!--<script type ="text/javascript" src = "{{url_for('static', filename = 'cloudnew.js')}}"></script> -->
+
+
   <script type ="text/javascript" src = "{{url_for('static', filename = 'multiline.js')}}"></script>
   <link rel="stylesheet" type="text/css" src = "{{url_for('static', filename = 'multiline.css')}}"></link>
   <script type ="text/javascript" src = "{{url_for('static', filename = 'dc.js')}}"></script>
-  <script type ="text/javascript" src = "{{url_for('static', filename = 'd3.layout.cloud.js')}}"></script>
-  <script type ="text/javascript" src = "{{url_for('static', filename = 'dc-wordcloud.js')}}"></script>
+  <!--<script type ="text/javascript" src = "{{url_for('static', filename = 'd3.layout.cloud.js')}}"></script>-->
+  <!--<script type ="text/javascript" src = "{{url_for('static', filename = 'wordCloud.js')}}"></script>-->
 
   <div class="container">
     <!-- --- DASHBOARD ----------->
 
     <div class="row">
 
-        <div id="dashboard" style="transform:scale(0.6); -webkit-transform:scale(0.6); -moz-transform:scale(0.6); -ms-transform:scale(0.6); -o-transform:scale(0.6);">
+        <div id="dashboard" >
             <strong>Dashboard</strong>
             <a class="reset" href="javascript:yearlyBubbleChart.filterAll();dc.redrawAll();"
                style="display: none;">reset</a>
@@ -21,7 +23,7 @@
       </div>
       </div>
 <div class="row">
-        <div id="dashboard2" style="transform:scale(0.6); -webkit-transform:scale(0.6); -moz-transform:scale(0.6); -ms-transform:scale(0.6); -o-transform:scale(0.6);">
+        <div id="dashboard2">
             <strong>Dashboard 2</strong>
             <a class="reset" href="javascript:gainOrLossChart.filterAll();dc.redrawAll();"
                 style="display: none;">reset</a>
@@ -131,7 +133,10 @@
       </div>
 
     </div>
+    <div class="row">
 
+    <div id="test"></div>
+</div>
     <div class="row">
         <div>
 
@@ -180,6 +185,7 @@
 
       //   drawWordCloud();
 
+    //var tagslist = dc.wordCloud("#tag-cloud")
 
           var tweetDistributionChart = dc.barChart('#tweet-distribution');
           var numberFormat = d3.format(".2f");
@@ -189,7 +195,7 @@
           var dayOfWeekChart = dc.rowChart('#day-of-week-chart');
           var scale = Math.min(400 * 1.2, 250 * 2.1);
           var hourOfDayChart = dc.barChart('#hour-of-day-chart');
-
+          var heatchart = dc.heatMap("#test");
           var timeChart2 = dc.lineChart("#dc-time-chart2");
 
           var dateFormatSpecifier = "%Y-%m-%d %H:%M:%S";
@@ -211,10 +217,10 @@
                 d.month = d3.timeMonth(d.dtg);
                 d.hash = d.hashtags.toLowerCase();
                 d.words=  d3.set(  d.hash.split(/[\s*\.*\,\;\+?\#\|:\-\/\\\[\]\(\)\{\}$%&0-9*]/)  ).values();
-
                //build huge string that holds all feedback
                allFeedback =allFeedback + " " + d.hash;
             });
+
               allWords = d3.set(allFeedback.split(/[\s*\.*\,\;\+?\#\|:\-\/\\\[\]\(\)\{\}$%&0-9*]/)).values();
               allWords.forEach( function(entry){ wordFrequencies.push({key: entry, count: 0 }) }  );
 
@@ -248,6 +254,10 @@
                   return d["hashtags"].toLowerCase();
               });
 
+              var separator = "~";
+              var tag_dim = data.dimension(function (d) { return d["hashtags"].toLowerCase() || "" });
+              var tag_group = tag_dim.group();
+              console.log(tag_group.top(3));
               var frequencyGroup= industries.groupAll().reduce(
                    function (p, v) {
                  	   for (var i in v.words) {
@@ -388,6 +398,15 @@
                    return d.dtg;
                });
 
+              var  runDim = data.dimension(function(d) {
+                var day = d.dtg.getDay();
+                var name = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+                return [d.hourNumber, name[day]]; });
+
+             var runGroup = runDim.group().reduceCount();
+
+             console.log(runGroup.top(3));
 
               d3.json('{{url_for('static', filename = 'us-states.json')}}').then(function (statesJson) {
                   usChart.width(990)
@@ -623,8 +642,23 @@
                         var chart = dc.textFilterWidget("#search")
                           .dimension(dateDimension);
 
+              heatchart
+                  .width(45 * 20 + 80)
+                  .height(45 * 5 + 40)
+                  .dimension(runDim)
+                  .group(runGroup)
+                  .keyAccessor(function(d) { return d.key[0] + ' hr'; })
+                  .valueAccessor(function(d) { return d.key[1]; })
+                  .colorAccessor(function(d) { return +d.value; })
 
-                                        dc.renderAll();
+                  .title(function(d) {
+                      return "Day:   " + d.key[0] + "\n" +
+                             "Hour:  " + d.key[1] + "\n" +
+                             "Count: " + (299000 + d.value)})
+                  .colors(["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"])
+                  .calculateColorDomain();
+
+                        dc.renderAll();
 
                   scalee();
                   // Change the size of the US chart by 0.7
