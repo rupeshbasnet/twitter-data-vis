@@ -12,11 +12,11 @@ app = Flask(__name__)
 #to the database and create sessions.
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
-#import Base and TwitterData class from database_setup.py to 
+#import Base and TwitterData class from database_setup.py to
 #access the data in the database.
 from database_setup import Base, TwitterData
 
-#Using create_engine to connect to the database.db 
+#Using create_engine to connect to the database.db
 #that was created using database_setup.py.
 engine = create_engine('sqlite:///database.db')
 #Binding Base class to the engine that we just created.
@@ -26,7 +26,7 @@ Base.metadata.bind=engine
 session = scoped_session(sessionmaker(bind=engine))
 #session = DBSession()
 
-@app.route('/twitterData/main')
+@app.route('/')
 def main():
     return render_template('main.html')
 
@@ -34,20 +34,24 @@ def main():
 def visualizations():
     return render_template('visualizations.html')
 
-
-
 @app.route('/twitterData/UsMap')
-def UsMap():
-    return render_template('UsMap.html')
+def charlottesville():
+    return render_template('dc_test_final.html')
 
+@app.route('/twitterData/final')
+def final():
+    return render_template('final_dash.html')
+
+# DC js route
 @app.route('/twitterData/forced')
-def forced():
-    return render_template('forced.html')
+def winterolympics():
+    return render_template('dc_test.html')
 
-@app.route('/twitterData/WordCloud')
-def WordCloud():
-    return render_template('worldcloud.html')
-#creating URL route for WITBRAGDAY 
+@app.route('/twitterData/witbragday')
+def witbragday():
+    return render_template('witbragday.html')
+
+#creating URL route for WITBRAGDAY
 @app.route('/twitterData/WITBRAGDAY')
 def twitterDataJSON():
 	#Get all the data from TwitterData and save it in Data.
