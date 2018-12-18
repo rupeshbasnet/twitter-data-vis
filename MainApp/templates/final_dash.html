@@ -216,6 +216,7 @@
                 d.hourNumber = (dateFormatParser(d.date)).getHours();
                 d.month = d3.timeMonth(d.dtg);
                 d.hash = d.hashtags.toLowerCase();
+                d.day = d.dtg.getDay();
                 d.words=  d3.set(  d.hash.split(/[\s*\.*\,\;\+?\#\|:\-\/\\\[\]\(\)\{\}$%&0-9*]/)  ).values();
                //build huge string that holds all feedback
                allFeedback =allFeedback + " " + d.hash;
@@ -368,9 +369,8 @@
               var hourOfDayGroup = hourOfDay.group();
 
                var dayOfWeek = data.dimension(function (d) {
-                   var day = d.dtg.getDay();
                    var name = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-                   return day + '.' + name[day];
+                   return d.day + '.' + name[d.day];
                });
 
                var dayOfWeekGroup = dayOfWeek.group();
@@ -399,10 +399,9 @@
                });
 
               var  runDim = data.dimension(function(d) {
-                var day = d.dtg.getDay();
                 var name = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-                return [d.hourNumber, name[day]]; });
+                return [d.hourNumber, name[d.day]];
+              });
 
              var runGroup = runDim.group().reduceCount();
 
@@ -650,7 +649,7 @@
                   .keyAccessor(function(d) { return d.key[0] + ' hr'; })
                   .valueAccessor(function(d) { return d.key[1]; })
                   .colorAccessor(function(d) { return +d.value; })
-
+                  .legend(dc.legend().x(0).y(0).itemHeight(13).gap(5))
                   .title(function(d) {
                       return "Day:   " + d.key[0] + "\n" +
                              "Hour:  " + d.key[1] + "\n" +
