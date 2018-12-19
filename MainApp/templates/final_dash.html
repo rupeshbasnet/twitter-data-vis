@@ -13,82 +13,55 @@
     <!-- --- DASHBOARD ----------->
 
     <div class="row">
-
+      <div>
+        <strong>Most Used Hashtag Dashboard</strong>
         <div id="dashboard" >
-            <strong>Dashboard</strong>
+
             <a class="reset" href="javascript:yearlyBubbleChart.filterAll();dc.redrawAll();"
                style="display: none;">reset</a>
-
-
+      </div>
       </div>
       </div>
 <div class="row">
+  <div>
+    <strong>Most Used Keyword Dashboard</strong>
         <div id="dashboard2">
-            <strong>Dashboard 2</strong>
+
             <a class="reset" href="javascript:gainOrLossChart.filterAll();dc.redrawAll();"
                 style="display: none;">reset</a>
 
 
         </div>
-    </div>
-    <!-- --- DASHBOARD2 ----------->
-    <div class="row">
-
+        </div>
     </div>
 
     <div class="row">
       <!-- ----- GEOLOCATION ---------->
-      <!--  <div class="chart-wrapper" id="chart-line1">
-            <strong>Timeline</strong>
-            <a class="reset" href="javascript:quarterChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
-            <div class="clearfix"></div>
-        </div>-->
         <div id="us-chart">
-            <strong>Tweet Distribution by States (color: total favourite counts)</strong>
+            <strong>Tweet Distribution by States (color: total tweet counts)</strong>
             <a class="reset" href="javascript:usChart.filterAll();dc.redrawAll();scalee();" style="display: none;">reset</a>
             <span class="reset" style="display: none;"> | Current filter: <span class="filter"></span></span>
             <div class="clearfix"></div>
         </div>
         <div class="clearfix"></div>
         <div id="industry-chart">
-            <strong>By Hashtags</strong> (y: number of retweets, x: total favorite, radius: total favorite )
+            <strong>By Hashtags</strong> (y: number of retweets, x: total favorite, radius: total tweet count )
             <a class="reset" href="javascript:industryChart.filterAll();dc.redrawAll();scalee();" style="display: none;">reset</a>
             <div class="clearfix"></div>
+
         </div>
+        <br>
+          <img height = "30%" width = "30%" src = "{{url_for('static', filename = 'bubblechartlegend.png')}}"/>
+
     </div>
 
-    <div class="row">
-        <div id="monthly-move-chart">
-            <strong></strong>
-            <span class="reset" style="display: none;">range: <span class="filter"></span></span>
-            <a class="reset" href="javascript:moveChart.filterAll();volumeChart.filterAll();dc.redrawAll();scalee();"
-               style="display: none;">reset</a>
-            <div class="clearfix"></div>
-        </div>
-    </div>
+    <div class ="row">
 
-    <div class="row">
-        <div id="monthly-volume-chart">
-        </div>
-        <p class="muted pull-right" style="margin-right: 15px;">select a time range to zoom in</p>
-    </div>
-
-    <div class="row">
-        <div id="us-chart"></div>
-        <p class="muted pull-right" style="margin-right: 15px;">select a time range to zoom in</p>
-    </div>
+      <a
+          href="javascript:dc.filterAll(); dc.renderAll();scalee();">Reset All</a>
+      </div>
 
 
-    <div class="row">
-        <div>
-            <div class="dc-data-count">
-                <span class="filter-count"></span> selected out of <span class="total-count"></span> records | <a
-                    href="javascript:dc.filterAll(); dc.renderAll();scalee();">Reset All</a>
-            </div>
-        </div>
-        <table class="table table-hover dc-data-table">
-        </table>
-    </div>
 
     <div class="row">
         <div id="dc-time-chart2">
@@ -136,6 +109,8 @@
     <div class="row">
 
     <div id="test"></div>
+
+    <div id="heatmapKey"></div>
 </div>
     <div class="row">
         <div>
@@ -163,29 +138,6 @@
 
 <script>
 
-  /*    var parseDate = d3.timeParse("%Y-%m-%dT%H:%M:%S");
-
-      d3.csv('{{url_for('static', filename = 'multi-line_witbrag.csv')}}', function(error, data) {
-      data.forEach(function (d) {
-          d.date = parseDate(d.date);
-          d.value1 = +d.value1;
-          d.value2 = +d.value2;
-          d.value3 = +d.value3;
-      });
-
-      var chart = makeLineChart(data, 'date', {
-          'Negative': {column: 'value1'},
-          'Neutral': {column: 'value2'},
-          'Positive': {column: 'value3'}
-      });
-      chart.bind({selector:"#chart-line1",chartSize:{height:452, width:960}, axisLabels: {xAxis:'Dates', yAxis: 'Count'}});
-      chart.render();
-
-    }); */
-
-      //   drawWordCloud();
-
-    //var tagslist = dc.wordCloud("#tag-cloud")
 
           var tweetDistributionChart = dc.barChart('#tweet-distribution');
           var numberFormat = d3.format(".2f");
@@ -283,19 +235,11 @@
                           }
                      );
 
-            //  var sortByFoo = crossfilter.quicksort.by(function(d) { return d.count; });
-
-              //var authSort = sortByFoo(frequencyGroup,0,frequencyGroup.length);
-                //  console.log(authSort);
-
-                //console.log(frequencyGroup.value());
-
 
               var hashtagGroup = industries.group().reduceCount(function (d) {
                   return d["hashtags"].toLowerCase();
               });
 
-            //  console.log(hashtagGroup.top(20));
 
               var statsByIndustries = industries.group().reduce(
                       function (p, v) {
@@ -321,9 +265,6 @@
                           return {amountRaised: 0, deals: 0, polarity: '', pole: 0}
                       }
               );
-            //  console.log(statsByIndustries.top(3));
-              // define a daily volume Dimension
-
 
 
                var volumeByDay = data.dimension(function(d) {
@@ -407,6 +348,65 @@
 
              console.log(runGroup.top(3));
 
+             var minValue = 0;
+             var maxValue = 83;
+             var range = maxValue - minValue;
+
+              var heatArr = [];
+              for (var i = 0; i < 24; i++) {
+               heatArr.push({
+                 val: minValue + i / 23 * range,
+                 index: i
+               });
+              }
+
+              var ndx = crossfilter(heatArr);
+
+              var keyHeatmap = ndx.dimension(function(d) {
+                return [d.index, 1];
+              });
+
+              var keyHeatmapGroup = keyHeatmap.group().reduceSum(function(d) {
+                return d.val;
+              });
+
+              var heatmapChart = dc.heatMap("#heatmapKey");
+
+              var heatColorMapping = function(d) {
+                return d3.scale.linear().domain([minValue, maxValue]).range(["blue", "red"])(d);
+              };
+
+              heatColorMapping.domain = function() {
+                return [minValue, maxValue];
+              };
+
+              heatmapChart.width(45 * 20 + 80)
+              .height(50)
+                  .dimension(keyHeatmap)
+                  .group(keyHeatmapGroup)
+                  .colorAccessor(function(d) {
+                    return d.value;
+                  })
+                  .keyAccessor(function(d) { return d.key[0]; })
+                  .valueAccessor(function(d) { return d.key[1]; })
+                  //.colsLabel(function(d){
+                  //  return heatArr[d].val.toFixed(0);
+                  //})
+                  .rowsLabel(function(d) {
+                    return "Legend";
+                  })
+                  .transitionDuration(0)
+                  .title(function (d) {
+                      return "Legend";
+                  })
+                  .colors(["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"])
+                  //legend(dc.htmlLegend().container('#name-legend').horizontal(true).highlightSelected(true))
+                  .calculateColorDomain();
+
+              heatmapChart.xBorderRadius(0);
+              heatmapChart.yBorderRadius(0);
+
+
               d3.json('{{url_for('static', filename = 'us-states.json')}}').then(function (statesJson) {
                   usChart.width(990)
                           .height(500)
@@ -418,14 +418,16 @@
                           .overlayGeoJson(statesJson.features, "state", function (d) {
                               return d.properties.name;
                           })
+                          .legend(dc.legend())
                       .projection(d3.geoAlbersUsa())
                       .valueAccessor(function(kv) {
-                          //console.log(kv);
                           return kv.value;
                       })
                           .title(function (d) {
                               return "State: " + d.key + "\nTotal tweets: " + numberFormat(d.value ? d.value : 0);
                           });
+
+
 
 
 
@@ -448,6 +450,7 @@
                           .r(d3.scaleLinear().domain([0, 4000]))
                           .colors(d3.schemeRdYlGn[5])
                           //(optional) define color domain to match your data domain if you want to bind data or color
+                          .legend(dc.legend().legendText(function(d, i) { return i + '. ' + d.name; }))
                           .colorDomain([-100, 100])
                       //##### Accessors
 
@@ -458,7 +461,7 @@
                               return d.value.pole;
                           })
                         /*  .colors(d3.scaleOrdinal().domain(["positive", "negative", "neutral"])
-                          .range(["#30d34e", "#ef2121", "#605e5e"]))
+
                           //(optional) define color domain to match your data domain if you want to bind data or color
 
                       //##### Accessors
@@ -496,22 +499,22 @@
 
                   timeChart2.renderArea(true)
                   .width(990)
-                                      .height(250)
-                                      //.margins({top: 10, right: 50, bottom: 30, left: 60})
-                                      .dimension(volumeByDay)
-                                      .group(sentimentGroup, sentimentArray[0], sel_stack(sentimentArray[0]))
-                                      //.group(sentimentGroup, sentimentArray[0], sel_stack(sentimentArray[0]))
-                                      .transitionDuration(500)
-                                      .renderHorizontalGridLines(true)
-                                      .legend(dc.legend().x(800).y(10).itemHeight(13).gap(5))
-                                      .elasticY(true)
-                                      .brushOn(false)
-                                      .rangeChart(tweetDistributionChart)
-                                      .x(d3.scaleTime().domain([new Date(2017, 7, 12), new Date(2017, 7, 18)])) // scale and domain of the graph
-                                      .xAxis();
+                      .height(250)
+                      //.margins({top: 10, right: 50, bottom: 30, left: 60})
+                      .dimension(volumeByDay)
+                      .group(sentimentGroup, sentimentArray[0], sel_stack(sentimentArray[0]))
+                      //.group(sentimentGroup, sentimentArray[0], sel_stack(sentimentArray[0]))
+                      .transitionDuration(500)
+                      .renderHorizontalGridLines(true)
+                      .legend(dc.legend().x(800).y(10).itemHeight(13).gap(5))
+                      .elasticY(true)
+                      .brushOn(false)
+                      .rangeChart(tweetDistributionChart)
+                      .x(d3.scaleTime().domain([new Date(2017, 7, 12), new Date(2017, 7, 18)])) // scale and domain of the graph
+                      .xAxis();
 
-                                      for (var i = 1; i < sentimentArray.length; i++)
-                                        timeChart2.stack(sentimentGroup, sentimentArray[i], sel_stack(sentimentArray[i]));
+                  for (var i = 1; i < sentimentArray.length; i++)
+                        timeChart2.stack(sentimentGroup, sentimentArray[i], sel_stack(sentimentArray[i]));
 
                   dayOfWeekChart /* dc.rowChart('#day-of-week-chart', 'chartGroup') */
                                 .width(180)
@@ -649,15 +652,19 @@
                   .keyAccessor(function(d) { return d.key[0] + ' hr'; })
                   .valueAccessor(function(d) { return d.key[1]; })
                   .colorAccessor(function(d) { return +d.value; })
-                  .legend(dc.legend().x(0).y(0).itemHeight(13).gap(5))
+                  .legend(dc.legend().x(800).y(10).itemHeight(13).gap(5))
                   .title(function(d) {
                       return "Day:   " + d.key[0] + "\n" +
                              "Hour:  " + d.key[1] + "\n" +
-                             "Count: " + (299000 + d.value)})
+                             "Count: " + d.value})
                   .colors(["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"])
+                  //legend(dc.htmlLegend().container('#name-legend').horizontal(true).highlightSelected(true))
                   .calculateColorDomain();
 
-                        dc.renderAll();
+
+
+
+              dc.renderAll();
 
                   scalee();
                   // Change the size of the US chart by 0.7
@@ -704,7 +711,7 @@
 
           function scalee() {
             usChart.selectAll('g.state').each(function (d) {
-                d3.select(this).attr('transform', 'scale(0.7)')
+                d3.select(this).attr('transform', 'scale(1)')
             })
           }
           function dashboard(id, fData){
